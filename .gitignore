@@ -1,0 +1,5 @@
+# Cardmarket files, downloaded by build.py
+build/src/ns.json
+build/src/pg.json
+__pycache__/
+.claude/

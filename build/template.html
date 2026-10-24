@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mes boosters">
+<meta name="theme-color" content="#EEF0F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10131D" media="(prefers-color-scheme: dark)">
+<title>Mes boosters</title>
+<link rel="apple-touch-icon" sizes="180x180" href="__ICON__">
+<link rel="icon" type="image/png" href="__ICON__">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Same binder language as the card trackers: one page per expansion, one pocket per booster artwork.
+   Owned pockets get a foil-blue frame. */
+:root{
+  --bg:#EEF0F6; --page:#FFFFFF; --pocket:#E4E8F1; --ink:#151A2C; --muted:#5D6580; --line:#D3D9E6;
+  --frame:#2F6BFF; --frame-2:#8FB4FF; --good:#2E8B5E; --danger:#C9443A; --warn:#B26A00;
+  --shadow:0 1px 2px rgba(21,26,44,.08),0 6px 20px rgba(21,26,44,.06);
+  --f-display:"Bricolage Grotesque",ui-rounded,system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10131D; --page:#181C2A; --pocket:#202538; --ink:#E9ECF6; --muted:#949CB8; --line:#2B3148;
+    --frame:#5C8BFF; --frame-2:#9DBBFF; --good:#53C08B; --danger:#EE6A5F; --warn:#F2B04E;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10131D; --page:#181C2A; --pocket:#202538; --ink:#E9ECF6; --muted:#949CB8; --line:#2B3148;
+  --frame:#5C8BFF; --frame-2:#9DBBFF; --good:#53C08B; --danger:#EE6A5F; --warn:#F2B04E;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 var(--f-body);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--frame);outline-offset:2px}
+
+.top{background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px;border-bottom:1px solid var(--line)}
+.wrap{max-width:1180px;margin:0 auto}
+.row1{display:flex;align-items:center;gap:12px}
+.brand{font:800 22px/1 var(--f-display);letter-spacing:-.01em;margin:0;flex:1;min-width:0}
+.brand small{display:block;font:500 12px/1.3 var(--f-body);color:var(--muted);letter-spacing:0;margin-top:3px}
+.iconbtn{border:1px solid var(--line);background:var(--page);border-radius:12px;height:40px;min-width:40px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-weight:600;font-size:14px}
+.progress{margin-top:10px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center}
+.count{font:800 26px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.count span{font-size:15px;color:var(--muted);font-weight:600}
+.bar{height:10px;border-radius:99px;background:var(--pocket);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--frame-2),var(--frame));transition:width .4s ease}
+.stats{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted)}
+.stats b{color:var(--ink);font-family:var(--f-mono);font-weight:700;font-size:12px}
+.tools{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.search{display:flex;gap:8px}
+.search input{flex:1;min-width:0;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--page);color:var(--ink);padding:0 14px;font:500 16px var(--f-body)}
+.search select{height:42px;border-radius:12px;border:1px solid var(--line);background:var(--page);color:var(--ink);padding:0 8px;font:500 14px var(--f-body);max-width:42%}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--page);border-radius:99px;height:32px;padding:0 12px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.sep{margin-left:8px}
+.cd{display:inline-block;background:var(--ink);color:var(--bg);border-radius:4px;padding:2px 5px;font:700 11px/1.1 var(--f-mono);letter-spacing:.02em;vertical-align:2px}
+
+main{padding:16px 16px calc(96px + env(safe-area-inset-bottom,0px))}
+.pages{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:16px;align-items:start}
+.bpage{background:var(--page);border:1px solid var(--line);border-radius:14px;padding:10px 10px 12px;box-shadow:var(--shadow);content-visibility:auto;contain-intrinsic-size:auto 460px}
+.bpage h2{margin:0 2px 2px;font:800 17px/1.15 var(--f-display);display:flex;gap:8px;align-items:baseline;justify-content:space-between}
+.bpage h2 span{font:500 11px var(--f-mono);color:var(--muted);white-space:nowrap}
+.bpage h2 em{font-style:normal;color:var(--good)}
+.bpage .sub{margin:0 2px 8px;font-size:12px;color:var(--muted)}
+.bpage .sub b{color:var(--ink);font-family:var(--f-mono);font-size:11.5px}
+.up{color:var(--warn);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:420px){ .grid{grid-template-columns:repeat(3,1fr)} }
+.pocket{position:relative;border:0;background:none;padding:0;text-align:left;cursor:pointer;min-width:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.pocket .im{position:relative;display:block;aspect-ratio:5/9;border-radius:8px;background:var(--pocket);border:1.5px dashed var(--line);overflow:hidden;transition:transform .35s ease}
+.pocket .im img{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);object-fit:contain;filter:grayscale(1) opacity(.45);transition:filter .2s;pointer-events:none;-webkit-user-drag:none}
+.pocket .vt{position:absolute;left:3px;right:3px;bottom:3px;z-index:2;background:rgba(10,14,28,.72);color:#fff;border-radius:5px;padding:2px 4px;font:600 9.5px/1.2 var(--f-body);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pocket .nm{display:block;margin-top:4px;font:600 11px/1.25 var(--f-body);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.5em}
+.pocket.holding .im{transform:scale(.94)}
+.pocket.own .im{border:3px solid var(--frame);box-shadow:0 0 0 1px var(--frame-2) inset;background:color-mix(in srgb,var(--frame) 10%,var(--pocket))}
+.pocket.own .im img{filter:none}
+.pocket.own .im::after{content:"";position:absolute;top:5px;right:5px;z-index:2;width:18px;height:18px;border-radius:50%;background:var(--good) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.3l2.6 2.5L12 5.4' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.pocket.flash .im{animation:flash .5s ease}
+@keyframes flash{0%{transform:scale(1)}40%{transform:scale(1.07)}100%{transform:scale(1)}}
+.empty{text-align:center;color:var(--muted);padding:48px 16px}
+.hint{margin:0 0 12px;font-size:13px;color:var(--muted)}
+
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(3,1fr);background:color-mix(in srgb,var(--page) 92%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabbar button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;font-size:11.5px;font-weight:600;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tabbar svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button[aria-current="page"]{color:var(--ink)}
+.tabbar button[aria-current="page"] svg{stroke:var(--ink);fill:color-mix(in srgb,var(--frame) 35%,transparent)}
+
+.psum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px;max-width:820px}
+.psum div{background:var(--page);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.psum small{display:block;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+.psum b{font:700 19px var(--f-mono)}
+.plist{display:flex;flex-direction:column;gap:6px;max-width:820px}
+.prow{width:100%;border:1px solid var(--line);background:var(--page);border-radius:12px;display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:6px 12px 6px 6px;text-align:left;cursor:pointer;content-visibility:auto;contain-intrinsic-size:auto 64px}
+.prow img,.prow .th{width:34px;aspect-ratio:5/9;border-radius:4px;background:var(--pocket);object-fit:contain;display:block}
+.prow .t{min-width:0}
+.prow .t b{display:block;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow .t small{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow .t i{font-style:normal;color:var(--good);font-weight:700}
+.prow .r{text-align:right;font:700 14px var(--f-mono);white-space:nowrap}
+.prow .r small{display:block;font:500 11px var(--f-mono);color:var(--muted)}
+.pnote{font-size:12.5px;color:var(--muted);max-width:820px;margin:12px 0 0}
+.link{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;font-size:13px}
+
+.scrim{position:fixed;inset:0;background:rgba(8,10,20,.5);z-index:40;opacity:0;transition:opacity .2s}
+.scrim.on{opacity:1}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--page);border-radius:20px 20px 0 0;max-height:92vh;max-height:92dvh;overflow-y:auto;overscroll-behavior:contain;
+  transform:translateY(100%);transition:transform .25s cubic-bezier(.2,.8,.2,1);padding:0 16px calc(24px + env(safe-area-inset-bottom,0px));max-width:760px;margin:0 auto;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+.sheet.on{transform:none}
+.grab{position:sticky;top:0;background:var(--page);padding:10px 0 6px;display:flex;justify-content:flex-end;z-index:2}
+.panel h3{margin:4px 0 6px;font:800 22px var(--f-display)}
+.panel h4{margin:18px 0 6px;font-size:14px}
+.panel p{margin:0 0 8px;color:var(--muted);font-size:13.5px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btn{height:42px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--pocket);font-weight:600;cursor:pointer}
+.btn.danger{color:var(--danger)}
+textarea{width:100%;min-height:90px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:10px;font:12px var(--f-mono)}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,40px);opacity:0;z-index:60;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;transition:.2s;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.on{transform:translate(-50%,0);opacity:1}
+
+/* Zoom (long press, or tap in the collection tab) */
+.zoom{position:fixed;inset:0;z-index:50;background:rgba(6,8,16,.9);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);
+  opacity:0;transition:opacity .18s ease;touch-action:none}
+.zoom.on{opacity:1}
+.zoom .zc{height:min(62dvh,640px);aspect-ratio:5/9;max-width:100%;display:grid;place-items:center;transform:scale(.9);transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.zoom.on .zc{transform:none}
+.zoom .zc img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 20px 40px rgba(0,0,0,.6))}
+.zoom .zi{width:min(100%,420px);color:#EEF1FA;font-size:13.5px;line-height:1.35}
+.zoom .zi h3{margin:0 0 4px;font:800 21px/1.1 var(--f-display)}
+.zoom .zi p{margin:2px 0;color:#C2C8DC}
+.zoom .zi .zp{font:700 15px var(--f-mono);color:#fff}
+.zoom .zb{display:flex;gap:8px;margin-top:10px}
+.zoom .zb button,.zoom .zb a{flex:1;height:44px;border-radius:12px;border:1.5px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-weight:700;cursor:pointer;display:grid;place-items:center;text-decoration:none;font-size:14px}
+.zoom .zb button.is{background:var(--frame);border-color:var(--frame)}
+.zoom .zx{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:12px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:16px;cursor:pointer}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="row1">
+      <h1 class="brand">Mes boosters<small id="sub">Boosters Pokémon français</small></h1>
+      <button class="iconbtn" id="menuBtn" aria-label="Sauvegarde et réglages">☰</button>
+    </div>
+    <div class="progress">
+      <div class="count" id="count">0 <span>/ 0</span></div>
+      <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="tools">
+      <div class="search">
+        <input id="q" type="search" placeholder="Extension, Pokémon, sigle…" autocomplete="off" enterkeyhint="search" aria-label="Rechercher un booster">
+        <select id="sort" aria-label="Trier"></select>
+      </div>
+      <div class="chips" id="blocChips" aria-label="Blocs"></div>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <p class="hint" id="hint"></p>
+  <div id="list"></div>
+</main>
+<nav class="tabbar" id="tabbar" aria-label="Onglets">
+  <button data-tab="all"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l-1 2 1 2v10l-1 2 1 2H7l1-2-1-2V7l1-2z"/><circle cx="12" cy="12" r="3"/></svg>Tous les boosters</button>
+  <button data-tab="coll"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.8c0 5.5-7.5 10.1-7.5 10.1z"/></svg>Ma collection</button>
+  <button data-tab="prix"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 6.5A6.5 6.5 0 1 0 17 17.5"/><path d="M4 10.5h9M4 13.5h9"/></svg>Prix</button>
+</nav>
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" hidden>
+  <div class="grab"><button class="iconbtn" id="closeBtn" aria-label="Fermer">✕</button></div>
+  <div id="sheetBody"></div>
+</section>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/*__DATA__*/
+</script>
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const eur = v => v == null ? "—" : v.toLocaleString("fr-FR", {style:"currency", currency:"EUR", minimumFractionDigits:2});
+const norm = s => String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today = () => new Date().toISOString().slice(0,10);
+// Poképédia originals can be several MB: load resized WebP copies through the wsrv.nl image cache, original as fallback
+const rs = (u, w) => `https://wsrv.nl/?url=${encodeURIComponent(u.replace(/^https?:\/\//, ""))}&w=${w}&output=webp&q=80`;
+const imgTag = (u, w, alt="", extra="") => `<img ${extra} src="${esc(rs(u, w))}" data-src="${esc(u)}" alt="${esc(alt)}" onerror="if(this.dataset.src&&this.src!==this.dataset.src){this.src=this.dataset.src}">`;
+const fdate = d => d ? new Date(d).toLocaleDateString("fr-FR", {month:"long", year:"numeric"}) : "";
+
+/* ---------- storage ---------- */
+const KEY = "boosters.collection.v1", UKEY = "boosters.ui.v1";
+function load(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } }
+function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } }
+let coll = load(KEY, {owned:{}});     // owned[boosterId] = "YYYY-MM-DD"
+let ui = Object.assign({tab:"all", bloc:"all", missingOnly:false, noSamples:false, sort:"date", psort:"date"}, load(UKEY, {}));
+function persist(){ if(!save(KEY, coll)) toast("Impossible d'enregistrer : stockage plein ou bloqué"); }
+try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch {}
+
+/* ---------- data ---------- */
+// GROUPS[i] = {id, t (extension), serie, date, y, c (sigle officiel), lc (sigle français), cm (produit Cardmarket), up (à venir), o}
+// CARDS[i]  = {id, g, a (visuel), v (variante), img, u (à vérifier), note, o}
+const BLOCS = [["wotc","Wizards",/^(Base|Gym|Neo|e-?Card|Wizards)/i],["ex","EX",/^EX/i],["pop","POP",/^POP/i],["dp","Diamant & Perle · Platine",/^(Diamant|Platine)/i],
+  ["hgss","HeartGold SoulSilver",/^(HeartGold|HS|L'appel)/i],["bw","Noir & Blanc",/^Noir/i],["xy","XY",/^XY/i],["sm","Soleil et Lune",/^Soleil/i],
+  ["swsh","Épée et Bouclier",/^Épée/i],["sv","Écarlate et Violet",/^Écarlate/i],["me","Méga-Évolution",/^Méga/i],["other","Autres",/./]];
+const G = new Map(GROUPS.map(g => [g.id, g]));
+for (const g of GROUPS) g.bloc = (BLOCS.find(([,,re]) => re.test(g.serie || "")) || BLOCS[BLOCS.length-1])[0];
+const BY_ID = new Map(CARDS.map(c => [c.id, c]));
+for (const c of CARDS){ const g = G.get(c.g); c.key = norm([c.a, c.v, g.t, g.serie, g.c, g.lc, g.y].join(" ")); }
+const isSample = c => !!c.v && /chantillon|avant-premi/i.test(c.v);
+const isOwned = c => !!coll.owned[c.id];
+const priceOf = g => { const r = g && g.cm && PRICES[g.cm]; return r ? (r[0] ?? r[1] ?? null) : null; };
+const cardPrice = c => isSample(c) ? null : priceOf(G.get(c.g));
+
+/* ---------- header ---------- */
+function blocOk(c){ return ui.bloc==="all" || G.get(c.g).bloc===ui.bloc; }
+function visibleCards(){ return CARDS.filter(c => blocOk(c) && !(ui.noSamples && isSample(c))); }
+function renderStats(){
+  const vis = visibleCards(), own = vis.filter(isOwned).length;
+  $("#count").innerHTML = `${own} <span>/ ${vis.length}</span>`;
+  $("#barFill").style.width = (vis.length ? own/vis.length*100 : 0).toFixed(2)+"%";
+  const sets = new Set(vis.map(c=>c.g)); let full = 0;
+  for (const gid of sets) if (vis.filter(c=>c.g===gid).every(isOwned)) full++;
+  let val = 0; for (const c of CARDS) if (isOwned(c)) val += cardPrice(c) || 0;
+  $("#stats").innerHTML = `<span><b>${full}/${sets.size}</b> extensions complètes</span><span>Valeur ≈ <b>${eur(val)}</b></span>`;
+}
+
+/* ---------- tabs & filters ---------- */
+const HINTS = {
+  all: "Touchez un booster pour l'ajouter à votre collection, touchez-le encore pour le retirer. Maintenez-le appuyé pour l'agrandir.",
+  coll: "Vos boosters. Touchez-en un pour l'agrandir.",
+  prix: "Prix moyen de vente Cardmarket d'un booster de chaque extension, en euros."
+};
+const SORTS = {
+  all: [["date","Chronologique"],["recent","Plus récents d'abord"],["name","Extension A→Z"]],
+  coll: [["date","Chronologique"],["recent","Plus récents d'abord"],["added","Ajout récent"]],
+  prix: [["date","Chronologique"],["desc","Prix ↓"],["asc","Prix ↑"]]
+};
+function setTab(t){
+  ui.tab = t; save(UKEY, ui);
+  $$("#tabbar button").forEach(b => { if (b.dataset.tab===t) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  $("#hint").textContent = HINTS[t];
+  const key = t==="prix" ? "psort" : "sort", opts = SORTS[t];
+  if (!opts.some(([k])=>k===ui[key])) ui[key] = opts[0][0];
+  $("#sort").innerHTML = opts.map(([k,l])=>`<option value="${k}">${l}</option>`).join("");
+  $("#sort").value = ui[key];
+  renderChips(); renderList(); window.scrollTo(0,0);
+}
+$("#tabbar").addEventListener("click", e => { const b = e.target.closest("button"); if (b) setTab(b.dataset.tab); });
+function renderChips(){
+  const present = new Set(GROUPS.map(g=>g.bloc));
+  $("#blocChips").innerHTML = [["all","Tous"], ...BLOCS.filter(([k])=>present.has(k)).map(([k,l])=>[k,l])]
+    .map(([k,l]) => `<button class="chip" data-b="${k}" aria-pressed="${ui.bloc===k}">${l}</button>`).join("");
+  $("#chips").innerHTML = (ui.tab==="all" ? `<button class="chip" data-m="1" aria-pressed="${ui.missingOnly}">Manquants seulement</button>` : "") +
+    `<button class="chip" data-s="1" aria-pressed="${ui.noSamples}">Sans échantillons ni avant-premières</button>`;
+}
+$("#blocChips").addEventListener("click", e => { const b = e.target.closest(".chip"); if(!b) return; ui.bloc = b.dataset.b; save(UKEY, ui); renderChips(); renderStats(); renderList(); });
+$("#chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b) return;
+  if (b.dataset.m) ui.missingOnly = !ui.missingOnly; if (b.dataset.s) ui.noSamples = !ui.noSamples;
+  save(UKEY, ui); renderChips(); renderStats(); renderList();
+});
+$("#sort").addEventListener("change", e => { ui[ui.tab==="prix"?"psort":"sort"] = e.target.value; save(UKEY, ui); renderList(); });
+let qt; $("#q").addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(renderList, 150); });
+
+function filtered(){
+  const q = norm($("#q").value.trim());
+  return CARDS.filter(c => {
+    if (!blocOk(c)) return false;
+    if (ui.noSamples && isSample(c)) return false;
+    if (ui.tab==="coll" && !isOwned(c)) return false;
+    if (ui.tab==="all" && ui.missingOnly && isOwned(c)) return false;
+    return !q || c.key.includes(q);
+  });
+}
+
+/* ---------- binder ---------- */
+function pocketHTML(c){
+  const own = isOwned(c);
+  return `<div class="pocket${own?" own":""}" role="button" tabindex="0" data-id="${esc(c.id)}" aria-pressed="${own}" aria-label="${esc(`${G.get(c.g).t}, ${c.a}${c.v?", "+c.v:""}`)}">
+    <span class="im">${imgTag(c.img, 240, "", 'loading="lazy" decoding="async"')}${c.v?`<span class="vt">${esc(c.v)}</span>`:""}</span>
+    <span class="nm">${esc(c.a)}${c.u?` <span class="up" title="À vérifier">?</span>`:""}</span>
+  </div>`;
+}
+function pageHead(g){
+  const all = CARDS.filter(c => c.g===g.id && !(ui.noSamples && isSample(c))), own = all.filter(isOwned).length;
+  return own===all.length && all.length ? `<em>complète</em>` : `${own}/${all.length}`;
+}
+function subLine(g){
+  const p = priceOf(g);
+  return `${g.c?`<span class="cd">${esc(g.c)}</span> `:""}${esc(fdate(g.date))}${g.up?` · <span class="up">à venir</span>`:""}${p!=null?` · booster ≈ <b>${eur(p)}</b>`:""}`;
+}
+function renderList(){
+  if (ui.tab==="prix"){ renderPrices(); return; }
+  const el = $("#list"), arr = filtered();
+  if (!arr.length){
+    el.innerHTML = ui.tab==="coll" && !Object.keys(coll.owned).length
+      ? `<p class="empty">Votre collection est vide.<br>Ouvrez l'onglet Tous les boosters et touchez ceux que vous possédez.</p>`
+      : `<p class="empty">Aucun booster ne correspond à ces filtres.</p>`;
+    return;
+  }
+  if (ui.tab==="coll" && ui.sort==="added"){
+    const flat = [...arr].sort((a,b)=> (coll.owned[b.id]||"").localeCompare(coll.owned[a.id]||""));
+    el.innerHTML = `<div class="bpage"><div class="grid">${flat.map(pocketHTML).join("")}</div></div>`; return;
+  }
+  const m = new Map();
+  for (const c of arr){ if(!m.has(c.g)) m.set(c.g, []); m.get(c.g).push(c); }
+  let gs = [...m.keys()].map(id => G.get(id));
+  if (ui.sort==="recent") gs.sort((a,b)=> b.o-a.o);
+  else if (ui.sort==="name") gs.sort((a,b)=> a.t.localeCompare(b.t,"fr"));
+  else gs.sort((a,b)=> a.o-b.o);
+  el.innerHTML = `<div class="pages">${gs.map(g => `<section class="bpage" data-g="${esc(g.id)}">
+      <h2>${esc(g.t)} <span>${pageHead(g)}</span></h2>
+      <p class="sub">${subLine(g)}</p>
+      <div class="grid">${m.get(g.id).sort((a,b)=>a.o-b.o).map(pocketHTML).join("")}</div></section>`).join("")}</div>`;
+}
+function refreshOne(id){
+  renderStats();
+  if (ui.tab!=="all"){ renderList(); return; }
+  const c = BY_ID.get(id), old = document.querySelector(`#list .pocket[data-id="${CSS.escape(id)}"]`);
+  if (old){
+    if (ui.missingOnly && isOwned(c)) old.remove();
+    else { const t = document.createElement("div"); t.innerHTML = pocketHTML(c); const nu = t.firstElementChild; old.replaceWith(nu); nu.classList.add("flash"); }
+  }
+  const h = document.querySelector(`.bpage[data-g="${CSS.escape(c.g)}"] h2 span`);
+  if (h) h.innerHTML = pageHead(G.get(c.g));
+}
+function setOwned(id, on){ if (on) coll.owned[id] = coll.owned[id] || today(); else delete coll.owned[id]; persist(); refreshOne(id); }
+function toggle(id){
+  const c = BY_ID.get(id), on = !isOwned(c); setOwned(id, on);
+  toast(`${G.get(c.g).t} · ${c.a} ${on?"ajouté ✓":"retiré"}`);
+}
+$("#list").addEventListener("click", e => {
+  const pr = e.target.closest(".prow"); if (pr){ ui.bloc="all"; $("#q").value = G.get(pr.dataset.g).t; setTab("all"); return; }
+  const p = e.target.closest(".pocket"); if (!p) return;
+  if (ui.tab==="all") toggle(p.dataset.id); else openZoom(p.dataset.id);
+});
+$("#list").addEventListener("keydown", e => { if ((e.key==="Enter"||e.key===" ") && e.target.classList.contains("pocket")){ e.preventDefault(); e.target.click(); } });
+
+/* ---------- prices tab ---------- */
+function renderPrices(){
+  const q = norm($("#q").value.trim());
+  let gs = GROUPS.filter(g => (ui.bloc==="all" || g.bloc===ui.bloc) && (!q || norm(g.t+" "+g.c+" "+g.serie).includes(q)));
+  const s = ui.psort;
+  if (s==="desc"||s==="asc"){ const k = s==="asc"?1:-1; gs.sort((a,b)=>{ const x=priceOf(a), y=priceOf(b); if(x==null) return 1; if(y==null) return -1; return (x-y)*k; }); }
+  else gs.sort((a,b)=>a.o-b.o);
+  let own = 0, rest = 0, nop = 0;
+  for (const c of CARDS){ const p = cardPrice(c); if (isSample(c)) continue; if (p==null){ nop++; continue; } if (isOwned(c)) own += p; else rest += p; }
+  const row = g => {
+    const cs = CARDS.filter(c=>c.g===g.id), mine = cs.filter(isOwned).length, p = priceOf(g), r = g.cm && PRICES[g.cm];
+    return `<button class="prow" data-g="${esc(g.id)}">${imgTag(cs[0].img, 80, "", 'loading="lazy"')}
+      <span class="t"><b>${esc(g.t)}</b><small>${g.c?esc(g.c)+" · ":""}${g.y} · ${cs.length} visuel${cs.length>1?"s":""}${mine?` · <i>${mine} possédé${mine>1?"s":""}</i>`:""}</small></span>
+      <span class="r">${eur(p)}<small>${r&&r[1]!=null?"tendance "+eur(r[1]):""}</small></span></button>`;
+  };
+  $("#list").innerHTML = `<div class="psum">
+      <div><small>Ma collection</small><b>${eur(own)}</b></div>
+      <div><small>Reste à acheter</small><b>${eur(rest)}</b></div>
+    </div><div class="plist">${gs.map(row).join("")}</div>
+    <p class="pnote">Prix Cardmarket du ${new Date(SNAP_DATE).toLocaleDateString("fr-FR")} : prix moyen de vente d'un booster de l'extension, tous visuels confondus.
+    Le guide des prix Cardmarket ne sépare pas les langues : c'est la moyenne des boosters de l'extension vendus, toutes langues européennes confondues. ${nop} boosters sans prix (produits rares ou promotionnels). Échantillons et avant-premières ne sont pas comptés.</p>`;
+}
+
+/* ---------- zoom (long press) ---------- */
+function cmLink(g){ return `https://www.cardmarket.com/fr/Pokemon/Products/Search?searchString=${encodeURIComponent(g.t+" booster")}`; }
+let zoomId = null;
+function zoomHTML(c){
+  const g = G.get(c.g), p = cardPrice(c), own = isOwned(c);
+  return `<button class="zx" data-zclose aria-label="Fermer">✕</button>
+    <div class="zc">${imgTag(c.img, 900, c.a)}</div>
+    <div class="zi"><h3>${esc(g.t)}</h3>
+      <p>${g.c?`<span class="cd">${esc(g.c)}</span> `:""}<b>${esc(c.a)}</b>${c.v?` · ${esc(c.v)}`:""}</p>
+      <p>${esc(g.serie)} · ${esc(fdate(g.date))}${g.up?" · à venir":""}${c.u?" · à vérifier":""}</p>
+      ${c.note?`<p>${esc(c.note)}</p>`:""}
+      ${p!=null?`<p><span class="zp">${eur(p)}</span> prix moyen Cardmarket d'un booster</p>`:""}
+      <div class="zb"><button data-zown class="${own?"is":""}">${own?"✓ Dans ma collection":"Ajouter à ma collection"}</button><a href="${esc(cmLink(g))}" target="_blank" rel="noopener">Cardmarket ↗</a></div>
+    </div>`;
+}
+function openZoom(id){
+  zoomId = id;
+  let z = $("#zoom");
+  if (!z){ z = document.createElement("div"); z.id = "zoom"; z.className = "zoom"; z.setAttribute("role","dialog"); z.setAttribute("aria-modal","true"); document.body.appendChild(z); }
+  z.innerHTML = zoomHTML(BY_ID.get(id)); z.hidden = false; requestAnimationFrame(()=>z.classList.add("on"));
+}
+function closeZoom(){ const z = $("#zoom"); if (!z || z.hidden) return; zoomId = null; z.classList.remove("on"); setTimeout(()=>{ if(!z.classList.contains("on")) z.hidden = true; }, 200); }
+const HOLD_MS = 420;
+let hold = null, swallowClick = false;
+function cancelHold(){ if (hold){ clearTimeout(hold.t); hold.p.classList.remove("holding"); hold = null; } }
+document.addEventListener("pointerdown", e => {
+  if (e.button > 0) return;
+  const p = e.target.closest(".pocket"); if (!p) return;
+  cancelHold(); swallowClick = false; p.classList.add("holding");
+  hold = {p, x:e.clientX, y:e.clientY, t:setTimeout(()=>{ p.classList.remove("holding"); swallowClick = true; hold = null;
+    try { navigator.vibrate && navigator.vibrate(12); } catch {} openZoom(p.dataset.id); }, HOLD_MS)};
+});
+document.addEventListener("pointermove", e => { if (hold && Math.hypot(e.clientX-hold.x, e.clientY-hold.y) > 10) cancelHold(); }, {passive:true});
+["pointerup","pointercancel","scroll"].forEach(ev => document.addEventListener(ev, cancelHold, {passive:true, capture:true}));
+document.addEventListener("click", e => { if (swallowClick && e.target.closest(".pocket")){ e.stopPropagation(); e.preventDefault(); } swallowClick = false; }, true);
+document.addEventListener("contextmenu", e => { if (e.target.closest(".pocket")) e.preventDefault(); });
+document.addEventListener("click", e => {
+  const z = $("#zoom"); if (!z || z.hidden || !z.contains(e.target)) return;
+  if (e.target.closest("[data-zown]")){ setOwned(zoomId, !coll.owned[zoomId]); z.innerHTML = zoomHTML(BY_ID.get(zoomId)); return; }
+  if (e.target.closest("a")) return;
+  if (e.target.closest("[data-zclose]") || !e.target.closest(".zb,.zi h3")) closeZoom();
+});
+document.addEventListener("keydown", e => { if (e.key==="Escape"){ closeZoom(); closeSheet(); } });
+
+/* ---------- menu / backup ---------- */
+function openSheet(html){
+  $("#sheetBody").innerHTML = html; $("#scrim").hidden = false; $("#sheet").hidden = false;
+  requestAnimationFrame(()=>{ $("#scrim").classList.add("on"); $("#sheet").classList.add("on"); });
+  $("#sheet").scrollTop = 0; document.body.style.overflow = "hidden";
+}
+function closeSheet(){
+  $("#scrim").classList.remove("on"); $("#sheet").classList.remove("on"); document.body.style.overflow = "";
+  setTimeout(()=>{ if(!$("#sheet").classList.contains("on")){ $("#scrim").hidden = true; $("#sheet").hidden = true; } }, 260);
+}
+$("#scrim").addEventListener("click", closeSheet);
+$("#closeBtn").addEventListener("click", closeSheet);
+function exportText(){ return JSON.stringify({app:"boosters-fr", v:1, date:today(), owned:coll.owned}); }
+$("#menuBtn").addEventListener("click", () => {
+  const n = Object.keys(coll.owned).length;
+  openSheet(`<div class="panel">
+    <h3>Sauvegarde</h3>
+    <p>Votre collection (${n} booster${n>1?"s":""}) est enregistrée sur cet appareil, dans ce navigateur. Faites une copie de temps en temps, et avant de changer de téléphone.</p>
+    <div class="btnrow"><button class="btn" id="expFile">Télécharger la sauvegarde</button><button class="btn" id="expCopy">Copier le texte</button></div>
+    <h4>Restaurer</h4>
+    <div class="btnrow"><label class="btn" style="display:inline-flex;align-items:center">Choisir un fichier<input type="file" id="impFile" accept=".json,application/json,text/plain" hidden></label></div>
+    <textarea id="impText" placeholder='{"app":"boosters-fr",…}' style="margin-top:8px"></textarea>
+    <div class="btnrow" style="margin-top:8px"><button class="btn" id="impGo">Restaurer depuis le texte</button></div>
+    <h4>Contenu</h4>
+    <p>${GROUPS.length} extensions françaises et ${CARDS.length} visuels de boosters, de Set de Base (1999) à aujourd'hui, plus les boosters échantillons, avant-premières, McDonald's et Packs Récompense Play! Pokémon. Les extensions JCC Pokémon Pocket et les extensions jamais sorties en français ne sont pas incluses. Les visuels marqués <span class="up">?</span> sont à vérifier.</p>
+    <h4>Prix</h4>
+    <p>Guide des prix public Cardmarket du ${new Date(SNAP_DATE).toLocaleDateString("fr-FR")}. Cardmarket a un seul produit « booster » par extension : le prix est le même pour tous les visuels et toutes les langues européennes.</p>
+    <h4>Sources</h4>
+    <p>Visuels : Poképédia. Extensions : TCGdex. Prix : Cardmarket.</p>
+    <h4>Installer sur le téléphone</h4>
+    <p>iPhone : dans Safari, bouton Partager, puis « Sur l'écran d'accueil ». Android : menu ⋮, puis « Ajouter à l'écran d'accueil ».</p>
+    <h4>Tout effacer</h4>
+    <div class="btnrow"><button class="btn danger" id="resetBtn">Effacer ma collection</button></div>
+  </div>`);
+});
+function importData(txt){
+  try {
+    const d = JSON.parse(txt); if (!d || typeof d.owned!=="object") throw 0;
+    const owned = {}; let skipped = 0;
+    for (const [k,v] of Object.entries(d.owned)){ if (BY_ID.has(k)) owned[k] = typeof v==="string" ? v : today(); else skipped++; }
+    coll.owned = owned; persist(); renderAll(); closeSheet();
+    toast(`${Object.keys(owned).length} boosters restaurés${skipped?` (${skipped} inconnus ignorés)`:""}`);
+  } catch { toast("Ce texte n'est pas une sauvegarde valide"); }
+}
+let resetArmed = 0;
+$("#sheetBody").addEventListener("click", async e => {
+  const id = e.target.id;
+  if (id==="expFile"){
+    const blob = new Blob([exportText()], {type:"application/json"}); const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = `boosters-collection-${today()}.json`; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+  }
+  if (id==="expCopy"){
+    try { await navigator.clipboard.writeText(exportText()); toast("Sauvegarde copiée"); }
+    catch { const t=$("#impText"); t.value = exportText(); t.select(); toast("Texte sélectionné : copiez-le"); }
+  }
+  if (id==="impGo") importData($("#impText").value);
+  if (id==="resetBtn"){
+    if (Date.now()-resetArmed < 4000){ coll.owned = {}; persist(); renderAll(); closeSheet(); toast("Collection effacée"); }
+    else { resetArmed = Date.now(); e.target.textContent = "Touchez encore pour confirmer"; setTimeout(()=>{ if(e.target.isConnected) e.target.textContent="Effacer ma collection"; },4000); }
+  }
+});
+$("#sheetBody").addEventListener("change", e => {
+  if (e.target.id==="impFile" && e.target.files[0]){ const r = new FileReader(); r.onload = () => importData(r.result); r.readAsText(e.target.files[0]); }
+});
+
+let tt; function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove("on"),1800); }
+function renderAll(){ renderStats(); renderChips(); renderList(); }
+renderStats(); setTab(ui.tab);
+$("#sub").textContent = `Boosters français · ${GROUPS.length} extensions · ${CARDS.length} visuels`;
+</script>
+</body>
+</html>
