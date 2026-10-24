@@ -1,54 +1,456 @@
 {
  "_doc": "Manual additions/corrections on top of Poképédia's booster files (src/pp_boosters.json) and TCGdex French sets.",
- "skip_files": ["^Boosters_", "Team_Rocket_Medley", "EX_Team_Rocket_Returns", "Verso", "Arri[eè]re"],
- "skip_sets": ["xy0", "pop7"],
- "file_map": {
-   "Booster_30e_Anniversaire.png": ["30th", "(visuel unique)"],
-   "Booster_POP_Series_7_Gallame.png": ["pop7", "Gallame"],
-   "Booster_Célébrations_Recto.png": ["cel25", "(visuel unique)"],
-   "Booster_Collection_McDonald's_2018_(France)_Goupix_d'Alola_Sabelette_d'Alola_Racaillou_d'Alola.png": ["mcdo2018", "Goupix d'Alola, Sabelette d'Alola, Racaillou d'Alola"],
-   "Booster_Collection_McDonald's_2018_(France)_Pikachu_Miaouss_Magicarpe.png": ["mcdo2018", "Pikachu, Miaouss, Magicarpe"],
-   "Booster_Collection_McDonald's_2018_(France)_Rocabot_Nounourson_Bébécaille.png": ["mcdo2018", "Rocabot, Nounourson, Bébécaille"],
-   "Booster_Collection_McDonald's_2018_(France)_Salamèche_Minidraco_Évoli.png": ["mcdo2018", "Salamèche, Minidraco, Évoli"],
-   "Booster_Collection_McDonald's_2019_(France)_Rondoudou_Voltorbe.png": ["mcdo2019", "Rondoudou, Voltorbe"],
-   "Booster_Collection_McDonald's_2019_(France)_Saquedeneu_Triopikeur_d'Alola.png": ["mcdo2019", "Saquedeneu, Triopikeur d'Alola"],
-   "Booster_Collection_McDonald's_2019_(France)_Élektek_Magmar.png": ["mcdo2019", "Élektek, Magmar"],
-   "Booster_Collection_McDonald's_2019_(France)_Évoli_Pikachu.png": ["mcdo2019", "Évoli, Pikachu"],
-   "Booster_Collection_McDonald's_2021_Bulbizarre_Salamèche_Carapuce_Pikachu.png": ["mcdo2021", "Bulbizarre, Salamèche, Carapuce, Pikachu"],
-   "Booster_Collection_McDonald's_2024_Pikachu_et_Dracolosse.png": ["mcdo2024", "Pikachu et Dracolosse"],
-   "Booster_Combat_Express_(2022)_Pikachu.png": ["combat2022", "Pikachu"],
-   "Booster_Combat_Express_(2023)_Coiffeton,_Chochodile,_Poussacha_et_Pikachu.png": ["combat2023", "Coiffeton, Chochodile, Poussacha et Pikachu"],
-   "Booster_Pack_Récompense_Play!_Pokémon_Série_1_Recto.png": ["play1", "(visuel unique)"],
-   "Booster_Pack_Récompense_Play!_Pokémon_Série_2_Recto.png": ["play2", "(visuel unique)"],
-   "Booster_Pack_Récompense_Play!_Pokémon_Série_3_Recto.png": ["play3", "(visuel unique)"],
-   "Booster_Pack_Récompense_Play!_Pokémon_Série_4_Recto.png": ["play4", "(visuel unique)"],
-   "Booster_Pack_Récompense_Play!_Pokémon_Série_5_Recto.png": ["play5", "(visuel unique)"],
-   "Booster_Pack_Récompense_Play!_Pokémon_Série_6_Recto.png": ["play6", "(visuel unique)"],
-   "Booster_Pack_Récompense_Play!_Pokémon_Série_7_Recto.png": ["play7", "(visuel unique)"],
-   "Booster_Pack_Récompense_Play!_Pokémon_Série_8_Recto.png": ["play8", "(visuel unique)"],
-   "Booster_Pack_Récompense_Play!_Pokémon_Série_9_Recto.png": ["play9", "(visuel unique)"]
- },
- "prefix_map": {"Méga-Évolution_Règne_Delta_": "me06"},
- "sets": [
-   {"id": "me06", "name": "Règne Delta", "serie": "Méga-Évolution", "date": "2026-11-06", "abbr": "DRE", "upcoming": true, "cm": "Delta Reign Booster"},
-   {"id": "pop7", "name": "POP Série 7", "serie": "POP", "date": "2008-03-01", "cm": "POP Series 7 Booster"},
-   {"id": "mcdo2018", "name": "Collection McDonald's 2018", "serie": "Autres", "date": "2018-06-13", "cm": "McDonald's Collection 2018 FR Booster"},
-   {"id": "mcdo2019", "name": "Collection McDonald's 2019", "serie": "Autres", "date": "2019-10-30", "cm": "McDonald's Collection 2019 FR Booster"},
-   {"id": "mcdo2021", "name": "Collection McDonald's 2021 (25e anniversaire)", "serie": "Autres", "date": "2021-02-09", "cm": "McDonald's Collection 25th Anniversary Booster"},
-   {"id": "mcdo2024", "name": "Collection McDonald's 2024", "serie": "Autres", "date": "2024-08-01"},
-   {"id": "combat2022", "name": "Combat Express (2022)", "serie": "Autres", "date": "2022-06-01"},
-   {"id": "combat2023", "name": "Combat Express (2023)", "serie": "Autres", "date": "2023-06-01"},
-   {"id": "play1", "name": "Pack Récompense Play! Pokémon, série 1", "serie": "Autres", "date": "2022-11-01", "cm": "Play! Pokémon Prize Pack Series One Booster"},
-   {"id": "play2", "name": "Pack Récompense Play! Pokémon, série 2", "serie": "Autres", "date": "2023-01-15", "cm": "Play! Pokémon Prize Pack Series Two Booster"},
-   {"id": "play3", "name": "Pack Récompense Play! Pokémon, série 3", "serie": "Autres", "date": "2023-08-14", "cm": "Play! Pokémon Prize Pack Series Three Booster"},
-   {"id": "play4", "name": "Pack Récompense Play! Pokémon, série 4", "serie": "Autres", "date": "2024-01-15", "cm": "Play! Pokémon Prize Pack Series Four Booster"},
-   {"id": "play5", "name": "Pack Récompense Play! Pokémon, série 5", "serie": "Autres", "date": "2024-08-01", "cm": "Play! Pokémon Prize Pack Series Five Booster"},
-   {"id": "play6", "name": "Pack Récompense Play! Pokémon, série 6", "serie": "Autres", "date": "2025-01-15", "cm": "Play! Pokémon Prize Pack Series Six Booster"},
-   {"id": "play7", "name": "Pack Récompense Play! Pokémon, série 7", "serie": "Autres", "date": "2025-07-01"},
-   {"id": "play8", "name": "Pack Récompense Play! Pokémon, série 8", "serie": "Autres", "date": "2026-01-15"},
-   {"id": "play9", "name": "Pack Récompense Play! Pokémon, série 9", "serie": "Autres", "date": "2026-07-01"}
+ "skip_files": [
+  "^Boosters_",
+  "EX_Team_Rocket_Returns",
+  "Verso",
+  "Arri[eè]re"
  ],
- "cm_names": {"swsh3.5": "Champion’s Path Booster", "hgss1": "HeartGold & SoulSilver Booster", "30th": "30th Celebration Booster"},
- "extra_packs": [],
- "drop_packs": []
+ "skip_sets": [
+  "xy0",
+  "pop7"
+ ],
+ "file_map": {
+  "Booster_30e_Anniversaire.png": [
+   "30th",
+   "(visuel unique)"
+  ],
+  "Booster_POP_Series_7_Gallame.png": [
+   "pop7",
+   "Gallame"
+  ],
+  "Booster_Célébrations_Recto.png": [
+   "cel25",
+   "(visuel unique)"
+  ],
+  "Booster_Collection_McDonald's_2018_(France)_Goupix_d'Alola_Sabelette_d'Alola_Racaillou_d'Alola.png": [
+   "mcdo2018",
+   "Goupix d'Alola, Sabelette d'Alola, Racaillou d'Alola"
+  ],
+  "Booster_Collection_McDonald's_2018_(France)_Pikachu_Miaouss_Magicarpe.png": [
+   "mcdo2018",
+   "Pikachu, Miaouss, Magicarpe"
+  ],
+  "Booster_Collection_McDonald's_2018_(France)_Rocabot_Nounourson_Bébécaille.png": [
+   "mcdo2018",
+   "Rocabot, Nounourson, Bébécaille"
+  ],
+  "Booster_Collection_McDonald's_2018_(France)_Salamèche_Minidraco_Évoli.png": [
+   "mcdo2018",
+   "Salamèche, Minidraco, Évoli"
+  ],
+  "Booster_Collection_McDonald's_2019_(France)_Rondoudou_Voltorbe.png": [
+   "mcdo2019",
+   "Rondoudou, Voltorbe"
+  ],
+  "Booster_Collection_McDonald's_2019_(France)_Saquedeneu_Triopikeur_d'Alola.png": [
+   "mcdo2019",
+   "Saquedeneu, Triopikeur d'Alola"
+  ],
+  "Booster_Collection_McDonald's_2019_(France)_Élektek_Magmar.png": [
+   "mcdo2019",
+   "Élektek, Magmar"
+  ],
+  "Booster_Collection_McDonald's_2019_(France)_Évoli_Pikachu.png": [
+   "mcdo2019",
+   "Évoli, Pikachu"
+  ],
+  "Booster_Collection_McDonald's_2021_Bulbizarre_Salamèche_Carapuce_Pikachu.png": [
+   "mcdo2021",
+   "Bulbizarre, Salamèche, Carapuce, Pikachu"
+  ],
+  "Booster_Collection_McDonald's_2024_Pikachu_et_Dracolosse.png": [
+   "mcdo2024",
+   "Pikachu et Dracolosse"
+  ],
+  "Booster_Combat_Express_(2022)_Pikachu.png": [
+   "combat2022",
+   "Pikachu"
+  ],
+  "Booster_Combat_Express_(2023)_Coiffeton,_Chochodile,_Poussacha_et_Pikachu.png": [
+   "combat2023",
+   "Coiffeton, Chochodile, Poussacha et Pikachu"
+  ],
+  "Booster_Pack_Récompense_Play!_Pokémon_Série_1_Recto.png": [
+   "play1",
+   "(visuel unique)"
+  ],
+  "Booster_Pack_Récompense_Play!_Pokémon_Série_2_Recto.png": [
+   "play2",
+   "(visuel unique)"
+  ],
+  "Booster_Pack_Récompense_Play!_Pokémon_Série_3_Recto.png": [
+   "play3",
+   "(visuel unique)"
+  ],
+  "Booster_Pack_Récompense_Play!_Pokémon_Série_4_Recto.png": [
+   "play4",
+   "(visuel unique)"
+  ],
+  "Booster_Pack_Récompense_Play!_Pokémon_Série_5_Recto.png": [
+   "play5",
+   "(visuel unique)"
+  ],
+  "Booster_Pack_Récompense_Play!_Pokémon_Série_6_Recto.png": [
+   "play6",
+   "(visuel unique)"
+  ],
+  "Booster_Pack_Récompense_Play!_Pokémon_Série_7_Recto.png": [
+   "play7",
+   "(visuel unique)"
+  ],
+  "Booster_Pack_Récompense_Play!_Pokémon_Série_8_Recto.png": [
+   "play8",
+   "(visuel unique)"
+  ],
+  "Booster_Pack_Récompense_Play!_Pokémon_Série_9_Recto.png": [
+   "play9",
+   "(visuel unique)"
+  ]
+ },
+ "prefix_map": {
+  "Méga-Évolution_Règne_Delta_": "me06"
+ },
+ "sets": [
+  {
+   "id": "me06",
+   "name": "Règne Delta",
+   "serie": "Méga-Évolution",
+   "date": "2026-11-06",
+   "abbr": "DRE",
+   "upcoming": true,
+   "cm": "Delta Reign Booster"
+  },
+  {
+   "id": "pop7",
+   "name": "POP Série 7",
+   "serie": "POP",
+   "date": "2008-03-01",
+   "cm": "POP Series 7 Booster"
+  },
+  {
+   "id": "mcdo2018",
+   "name": "Collection McDonald's 2018",
+   "serie": "Autres",
+   "date": "2018-06-13",
+   "cm": "McDonald's Collection 2018 FR Booster"
+  },
+  {
+   "id": "mcdo2019",
+   "name": "Collection McDonald's 2019",
+   "serie": "Autres",
+   "date": "2019-10-30",
+   "cm": "McDonald's Collection 2019 FR Booster"
+  },
+  {
+   "id": "mcdo2021",
+   "name": "Collection McDonald's 2021 (25e anniversaire)",
+   "serie": "Autres",
+   "date": "2021-02-09",
+   "cm": "McDonald's Collection 25th Anniversary Booster"
+  },
+  {
+   "id": "mcdo2024",
+   "name": "Collection McDonald's 2024",
+   "serie": "Autres",
+   "date": "2024-08-01"
+  },
+  {
+   "id": "combat2022",
+   "name": "Combat Express (2022)",
+   "serie": "Autres",
+   "date": "2022-06-01"
+  },
+  {
+   "id": "combat2023",
+   "name": "Combat Express (2023)",
+   "serie": "Autres",
+   "date": "2023-06-01"
+  },
+  {
+   "id": "play1",
+   "name": "Pack Récompense Play! Pokémon, série 1",
+   "serie": "Autres",
+   "date": "2022-11-01",
+   "cm": "Play! Pokémon Prize Pack Series One Booster"
+  },
+  {
+   "id": "play2",
+   "name": "Pack Récompense Play! Pokémon, série 2",
+   "serie": "Autres",
+   "date": "2023-01-15",
+   "cm": "Play! Pokémon Prize Pack Series Two Booster"
+  },
+  {
+   "id": "play3",
+   "name": "Pack Récompense Play! Pokémon, série 3",
+   "serie": "Autres",
+   "date": "2023-08-14",
+   "cm": "Play! Pokémon Prize Pack Series Three Booster"
+  },
+  {
+   "id": "play4",
+   "name": "Pack Récompense Play! Pokémon, série 4",
+   "serie": "Autres",
+   "date": "2024-01-15",
+   "cm": "Play! Pokémon Prize Pack Series Four Booster"
+  },
+  {
+   "id": "play5",
+   "name": "Pack Récompense Play! Pokémon, série 5",
+   "serie": "Autres",
+   "date": "2024-08-01",
+   "cm": "Play! Pokémon Prize Pack Series Five Booster"
+  },
+  {
+   "id": "play6",
+   "name": "Pack Récompense Play! Pokémon, série 6",
+   "serie": "Autres",
+   "date": "2025-01-15",
+   "cm": "Play! Pokémon Prize Pack Series Six Booster"
+  },
+  {
+   "id": "play7",
+   "name": "Pack Récompense Play! Pokémon, série 7",
+   "serie": "Autres",
+   "date": "2025-07-01"
+  },
+  {
+   "id": "play8",
+   "name": "Pack Récompense Play! Pokémon, série 8",
+   "serie": "Autres",
+   "date": "2026-01-15"
+  },
+  {
+   "id": "play9",
+   "name": "Pack Récompense Play! Pokémon, série 9",
+   "serie": "Autres",
+   "date": "2026-07-01"
+  }
+ ],
+ "cm_names": {
+  "swsh3.5": "Champion’s Path Booster",
+  "hgss1": "HeartGold & SoulSilver Booster",
+  "30th": "30th Celebration Booster"
+ },
+ "extra_packs": [
+  {
+   "set": "swsh6",
+   "art": "Wushours, Sepiatop, Rocabot",
+   "v": "Pack Loisir (échantillon)",
+   "img": "https://www.pokepedia.fr/images/6/6b/Pack_Loisir_%C3%89p%C3%A9e_et_Bouclier_R%C3%A8gne_de_Glace.png",
+   "note": "Échantillon magazine Dimension Pokémon n°8"
+  },
+  {
+   "set": "swsh7",
+   "art": "Évoli, Wattouat, Draby",
+   "v": "Pack Loisir (échantillon)",
+   "img": "https://www.pokepedia.fr/images/9/9e/Pack_Loisir_%C3%89p%C3%A9e_et_Bouclier_%C3%89volution_C%C3%A9leste.png",
+   "note": "Échantillon magazine"
+  },
+  {
+   "set": "swsh8",
+   "art": "Sabelette, Rondoudou, Marill",
+   "v": "Pack Loisir (échantillon)",
+   "img": "https://www.pokepedia.fr/images/6/6d/Pack_Loisir_%C3%89p%C3%A9e_et_Bouclier_Poing_de_Fusion.png",
+   "note": "Échantillon magazine"
+  },
+  {
+   "set": "sv02",
+   "art": "Poussacha, Chochodile, Coiffeton",
+   "v": "Pack Loisir (échantillon)",
+   "img": "https://www.pokepedia.fr/images/f/f5/Pack_Loisir_%C3%89carlate_et_Violet_%C3%89volutions_%C3%A0_Paldea.png",
+   "note": "Booster Mag n°21"
+  },
+  {
+   "set": "sv08",
+   "art": "Solochi, Noeunoeuf, Magnéti",
+   "v": "Pack Loisir (échantillon)",
+   "img": "https://www.pokepedia.fr/images/4/4b/Pack_Loisir_%C3%89carlate_et_Violet_%C3%89tincelles_D%C3%A9ferlantes.png",
+   "note": "Hors-série Dimension Pokémon"
+  }
+ ],
+ "drop_packs": [],
+ "fr_dates": {
+  "base1": "1999-11-18",
+  "base2": "2000-07-01",
+  "base3": "2000-11-01",
+  "base5": "2001-03-01",
+  "neo1": "2001-05-20",
+  "neo2": "2001-10-15",
+  "neo3": "2002-01-01",
+  "neo4": "2002-06-01",
+  "ecard1": "2003-03-09",
+  "ecard2": "2003-07-01",
+  "ex1": "2003-12-12",
+  "ex2": "2004-03-12",
+  "ex3": "2004-08-28",
+  "ex4": "2005-02-15",
+  "ex5": "2005-12-09",
+  "ex6": "2004-11-10",
+  "ex8": "2005-05-27",
+  "ex9": "2005-08-26",
+  "ex10": "2006-03-24",
+  "ex11": "2006-06-09",
+  "ex12": "2006-09-01",
+  "ex13": "2006-11-19",
+  "ex14": "2007-02-09",
+  "ex15": "2007-05-18",
+  "ex16": "2007-08-24",
+  "dp1": "2007-11-09",
+  "dp2": "2008-02-15",
+  "dp3": "2008-05-16",
+  "dp4": "2008-08-29",
+  "dp5": "2008-11-07",
+  "dp6": "2009-02-10",
+  "dp7": "2009-05-15",
+  "pl1": "2009-08-18",
+  "pl2": "2009-11-06",
+  "pl3": "2010-02-11",
+  "hgss1": "2010-05-05",
+  "hgss2": "2010-08-20",
+  "hgss3": "2010-11-06",
+  "hgss4": "2011-01-29",
+  "col1": "2011-03-26",
+  "bw1": "2011-05-25",
+  "bw2": "2011-09-28",
+  "bw3": "2012-01-14",
+  "bw4": "2012-03-24",
+  "bw5": "2012-08-25",
+  "bw6": "2012-11-10",
+  "dv1": "2012-09-29",
+  "bw7": "2013-02-16",
+  "bw8": "2013-05-08",
+  "bw9": "2013-08-21",
+  "bw10": "2013-11-06",
+  "xy1": "2014-02-22",
+  "xy2": "2014-05-27",
+  "xy3": "2014-08-23",
+  "xy4": "2014-11-08",
+  "xy5": "2015-02-21",
+  "dc1": "2015-08-22",
+  "xy6": "2015-05-23",
+  "xy7": "2015-08-22",
+  "xy8": "2015-11-07",
+  "xy9": "2016-02-06",
+  "g1": "2016-03-19",
+  "xy10": "2016-05-07",
+  "xy11": "2016-08-20",
+  "xy12": "2016-11-19",
+  "sm2": "2017-05-13",
+  "sm3": "2017-08-19",
+  "sm4": "2017-11-04",
+  "sm9": "2019-02-01",
+  "det1": "2019-04-15",
+  "swsh4.5": "2021-02-21",
+  "swsh12.5": "2023-01-23",
+  "sv10.5w": "2025-07-18",
+  "sv10.5b": "2025-07-18",
+  "me01": "2025-10-10"
+ },
+ "_doc_fr_dates": "French release dates (Poképédia); TCGdex dates are the US ones up to ~2016.",
+ "samples": {
+  "bw4": "Pikachu Grainipiot Polarhume",
+  "bw5": "Bulbizarre Poussifeu Tiplouf",
+  "bw6": "Keunotor Griknot Solochi",
+  "bw7": "Carapuce Skitty Spoink",
+  "xy1": "Marisson Feunnec Grenousse",
+  "xy2": "Psystigri Hélionceau Galvaran",
+  "xy3": "Pandespiègle Sonistrelle Flingouste",
+  "xy4": "Dedenne Mucuscule Pitrouille",
+  "xy5": "Arcko Poussifeu Gobou",
+  "xy6": "Draby Scorplane Nirondelle",
+  "xy7": "Balbuto Gringolem Mystherbe",
+  "xy8": "Zorua Sonistrelle Osselait",
+  "xy9": "Luxio Grenousse Psykokwak",
+  "xy10": "Chinchidou Archéomire Feunnec",
+  "xy11": "Solochi Ouisticram Moustillon",
+  "xy12": "Salamèche Pikachu Machoc",
+  "sm1": "Flamiaou Brindibou Otaquin",
+  "sm2": "Bébécaille Rocabot Nounourson",
+  "sm3": "Bacabouh Crabagarre Togedemaru",
+  "sm4": "Pikachu Tritox Racaillou d'Alola",
+  "sm5": "Tortipouss Ouisticram Tiplouf",
+  "sm6": "Feunnec Mucuscule Grenousse",
+  "sm7": "Draby Cacnea Spoink",
+  "sm8": "Germignon Wattouat Héricendre",
+  "sm9": "Minidraco Miaouss Psykokwak",
+  "sm10": "Grenousse Riolu Meltan",
+  "sm11": "Osselait Minidraco Keunotor",
+  "sm12": "Ponchiot Mystherbe Gruikui",
+  "swsh1": "Larméléon Flambino Ouistempo",
+  "swsh2": "Fantyrm Salarsen Grimalin",
+  "swsh3": "Darumarond de Galar Charibari Goupilou",
+  "swsh4": "Poulpaf Khélocrok Salamèche",
+  "swsh5": "Ramoloss de Galar Gruikui Lixy"
+ },
+ "_doc_samples": "3-card magazine / promo sample packs whose file has no 'Échantillon' in its name",
+ "editions": {
+  "base1": {
+   "Florizarre": "1re édition",
+   "Dracaufeu": "Illimitée",
+   "Tortank": "Illimitée"
+  },
+  "base2": {
+   "Grodoudou": "1re édition",
+   "Pyroli": "1re édition",
+   "Insécateur": "Illimitée"
+  },
+  "base3": {
+   "Lokhlass": "1re édition",
+   "Ptéra": "1re édition",
+   "Électhor": "1re édition"
+  },
+  "base5": {
+   "Giovanni": "Illimitée",
+   "Jessie James": "Illimitée",
+   "Léviator": "Illimitée",
+   "Medley": "Illimitée"
+  },
+  "neo1": {
+   "Aligatueur": "1re édition",
+   "Lugia": "1re édition",
+   "Méganium": "Illimitée",
+   "Typhlosion": "Illimitée"
+  },
+  "neo2": {
+   "*": "Illimitée"
+  },
+  "neo3": {
+   "*": "Illimitée"
+  },
+  "neo4": {
+   "*": "Illimitée"
+  }
+ },
+ "edition_images": {
+  "base1:Dracaufeu:1re édition": "https://archives.bulbagarden.net/media/upload/4/4d/Base_Set_Booster_Charizard_FR.jpg",
+  "base1:Tortank:1re édition": "https://archives.bulbagarden.net/media/upload/8/8d/Base_Set_Booster_Blastoise_FR.jpg"
+ },
+ "edition_uncertain": [
+  "base2:Insécateur",
+  "base5:Giovanni",
+  "base5:Léviator",
+  "base5:Medley",
+  "neo1:Méganium",
+  "neo1:Typhlosion",
+  "neo2:Cizayox",
+  "neo2:Noctali",
+  "neo2:Queulorior",
+  "neo2:Xatu",
+  "neo3:Entei",
+  "neo3:Feuforêve",
+  "neo3:Raikou",
+  "neo3:Suicune",
+  "neo4:Celebi",
+  "neo4:Noarfang",
+  "neo4:Togetic",
+  "neo4:Tyranocif"
+ ],
+ "image_notes": {
+  "neo3:Entei": "Image : booster dans son blister de vente.",
+  "pop2:Florizarre": "Image : version allemande du booster (même visuel).",
+  "pop3:Voltali Aquali Pyroli": "Image : version anglaise du booster (même visuel).",
+  "pop9:Carchacrok": "Image : version anglaise du booster (même visuel)."
+ }
 }

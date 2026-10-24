@@ -59,6 +59,8 @@ for s in FR_SETS:
                      "abbr": (s.get("abbreviation") or {}).get("official"), "loc": (s.get("abbreviation") or {}).get("localized")}
 for s in EXTRA["sets"]:
     SETS[s["id"]] = {**{"abbr": None, "loc": None}, **s}
+for sid, d in EXTRA.get("fr_dates", {}).items():  # French release dates (TCGdex has US dates for older sets)
+    if sid in SETS: SETS[sid]["date"] = d
 
 # Poképédia file name -> set: longest "<série> <extension>" prefix, accents and punctuation ignored
 PREFIX = ["", "ecarlateetviolet", "epeeetbouclier", "soleiletlune", "xy", "noirblanc", "hs", "platine", "diamantperle", "megaevolution", "ex"]
@@ -97,19 +99,40 @@ for f in FILES:
             sid, art = best[1], " ".join(toks[best[0]:]).strip() or "(visuel unique)"
     if sid not in SETS: continue
     art, v = variant_of(art)
+    if not v and EXTRA["samples"].get(sid) == art: v = "Booster échantillon"
     PACKS.append({"set": sid, "art": art or "(visuel unique)", "v": v, "img": f["url"], "w": f.get("width"), "h": f.get("height")})
 for e in EXTRA["extra_packs"]:
-    PACKS.append(dict(e))
+    PACKS.append({k: val for k, val in e.items() if val is not None})
+
+# French Wizards sets were printed in "1re édition" and "Illimitée": label each Poképédia image with its edition and add
+# the other edition with the same illustration (or a dedicated image when one is known)
+other = {"1re édition": "Illimitée", "Illimitée": "1re édition"}
+for sid, eds in EXTRA["editions"].items():
+    regular = [p for p in PACKS if p["set"] == sid and p["v"] in ("", "1re édition")]
+    for p in regular:
+        if not p["v"]: p["v"] = eds.get(p["art"]) or eds.get("*") or "Illimitée"
+    for p in list(regular):
+        ov = other[p["v"]]
+        if any(q["set"] == sid and q["art"] == p["art"] and q["v"] == ov for q in PACKS): continue
+        key = f"{sid}:{p['art']}:{ov}"
+        img = EXTRA["edition_images"].get(key)
+        q = {"set": sid, "art": p["art"], "v": ov, "img": img or p["img"]}
+        if not img: q["note"] = f"Image de la version {p['v'].lower()} : même illustration."
+        if f"{sid}:{p['art']}" in EXTRA["edition_uncertain"]: q["u"] = 1
+        PACKS.append(q)
+for p in PACKS:
+    n = EXTRA["image_notes"].get(f"{p['set']}:{p['art']}")
+    if n and not p.get("note") and p["v"] in ("", "Illimitée", "1re édition"): p["note"] = n
 drop = {(d["set"], d["art"]) for d in EXTRA["drop_packs"]}
 PACKS = [p for p in PACKS if (p["set"], p["art"]) not in drop]
 
-VORDER = {"": 0, "1re édition": 1, "Booster avant-première": 2, "Booster échantillon": 3}
+VORDER = {"": 0, "1re édition": 0, "Illimitée": 0, "Booster avant-première": 2, "Booster échantillon": 3, "Pack Loisir (échantillon)": 4}
 by_set = defaultdict(list)
 for p in PACKS: by_set[p["set"]].append(p)
 GROUPS, CARDS = [], []
 for sid, ps in by_set.items():
     s = SETS[sid]
-    ps.sort(key=lambda p: (VORDER.get(p["v"], 9), norm(p["art"]) if p["art"] != "(visuel unique)" else ""))
+    ps.sort(key=lambda p: (VORDER.get(p["v"], 9), norm(p["art"]) if p["art"] != "(visuel unique)" else "", p["v"] != "1re édition"))
     cm_name = s.get("cm") or EXTRA["cm_names"].get(sid) or (f"{EN_NAME[sid]} Booster" if sid in EN_NAME else None)
     cm = CM_BY_NAME.get(cm_name.lower()) if cm_name else None
     if not cm and sid in EN_NAME:  # EX sets are listed as "EX <name> Booster" on Cardmarket
