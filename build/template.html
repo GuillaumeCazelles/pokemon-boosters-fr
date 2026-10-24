@@ -215,7 +215,8 @@ const KEY = "boosters.collection.v1", UKEY = "boosters.ui.v1";
 function load(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } }
 function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } }
 let coll = load(KEY, {owned:{}});     // owned[boosterId] = "YYYY-MM-DD"
-let ui = Object.assign({tab:"all", bloc:"all", missingOnly:false, noSamples:false, sort:"date", psort:"date"}, load(UKEY, {}));
+let ui = Object.assign({tab:"all", blocs:[], missingOnly:false, noSamples:false, sort:"date", psort:"date"}, load(UKEY, {}));
+if (typeof ui.bloc === "string"){ ui.blocs = ui.bloc==="all" ? [] : [ui.bloc]; delete ui.bloc; }  // single-bloc filter from the first version
 function persist(){ if(!save(KEY, coll)) toast("Impossible d'enregistrer : stockage plein ou bloqué"); }
 try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch {}
 
@@ -235,7 +236,9 @@ const priceOf = g => { const r = g && g.cm && PRICES[g.cm]; return r ? (r[0] ?? 
 const cardPrice = c => isSample(c) ? null : priceOf(G.get(c.g));
 
 /* ---------- header ---------- */
-function blocOk(c){ return ui.bloc==="all" || G.get(c.g).bloc===ui.bloc; }
+// several blocs can be selected at once; none selected = all blocs
+const blocOkG = g => !ui.blocs.length || ui.blocs.includes(g.bloc);
+function blocOk(c){ return blocOkG(G.get(c.g)); }
 function visibleCards(){ return CARDS.filter(c => blocOk(c) && !(ui.noSamples && isSample(c))); }
 function renderStats(){
   const vis = visibleCards(), own = vis.filter(isOwned).length;
@@ -249,7 +252,7 @@ function renderStats(){
 
 /* ---------- tabs & filters ---------- */
 const HINTS = {
-  all: "Touchez un booster pour l'ajouter à votre collection, touchez-le encore pour le retirer. Maintenez-le appuyé pour l'agrandir.",
+  all: "Touchez un booster pour l'ajouter à votre collection, touchez-le encore pour le retirer. Maintenez-le appuyé pour l'agrandir. Vous pouvez choisir plusieurs blocs à la fois.",
   coll: "Vos boosters. Touchez-en un pour l'agrandir.",
   prix: "Prix moyen de vente Cardmarket d'un booster de chaque extension, en euros."
 };
@@ -272,11 +275,17 @@ $("#tabbar").addEventListener("click", e => { const b = e.target.closest("button
 function renderChips(){
   const present = new Set(GROUPS.map(g=>g.bloc));
   $("#blocChips").innerHTML = [["all","Tous"], ...BLOCS.filter(([k])=>present.has(k)).map(([k,l])=>[k,l])]
-    .map(([k,l]) => `<button class="chip" data-b="${k}" aria-pressed="${ui.bloc===k}">${l}</button>`).join("");
+    .map(([k,l]) => `<button class="chip" data-b="${k}" aria-pressed="${k==="all" ? !ui.blocs.length : ui.blocs.includes(k)}">${l}</button>`).join("");
   $("#chips").innerHTML = (ui.tab==="all" ? `<button class="chip" data-m="1" aria-pressed="${ui.missingOnly}">Manquants seulement</button>` : "") +
     `<button class="chip" data-s="1" aria-pressed="${ui.noSamples}">Sans échantillons ni avant-premières</button>`;
 }
-$("#blocChips").addEventListener("click", e => { const b = e.target.closest(".chip"); if(!b) return; ui.bloc = b.dataset.b; save(UKEY, ui); renderChips(); renderStats(); renderList(); });
+$("#blocChips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b) return;
+  const k = b.dataset.b;
+  if (k==="all") ui.blocs = [];
+  else ui.blocs = ui.blocs.includes(k) ? ui.blocs.filter(x=>x!==k) : [...ui.blocs, k];
+  save(UKEY, ui); renderChips(); renderStats(); renderList();
+});
 $("#chips").addEventListener("click", e => {
   const b = e.target.closest(".chip"); if(!b) return;
   if (b.dataset.m) ui.missingOnly = !ui.missingOnly; if (b.dataset.s) ui.noSamples = !ui.noSamples;
@@ -353,7 +362,7 @@ function toggle(id){
   toast(`${G.get(c.g).t} · ${c.a} ${on?"ajouté ✓":"retiré"}`);
 }
 $("#list").addEventListener("click", e => {
-  const pr = e.target.closest(".prow"); if (pr){ ui.bloc="all"; $("#q").value = G.get(pr.dataset.g).t; setTab("all"); return; }
+  const pr = e.target.closest(".prow"); if (pr){ ui.blocs=[]; $("#q").value = G.get(pr.dataset.g).t; setTab("all"); return; }
   const p = e.target.closest(".pocket"); if (!p) return;
   if (ui.tab==="all") toggle(p.dataset.id); else openZoom(p.dataset.id);
 });
@@ -362,7 +371,7 @@ $("#list").addEventListener("keydown", e => { if ((e.key==="Enter"||e.key===" ")
 /* ---------- prices tab ---------- */
 function renderPrices(){
   const q = norm($("#q").value.trim());
-  let gs = GROUPS.filter(g => (ui.bloc==="all" || g.bloc===ui.bloc) && (!q || norm(g.t+" "+g.c+" "+g.serie).includes(q)));
+  let gs = GROUPS.filter(g => blocOkG(g) && (!q || norm(g.t+" "+g.c+" "+g.serie).includes(q)));
   const s = ui.psort;
   if (s==="desc"||s==="asc"){ const k = s==="asc"?1:-1; gs.sort((a,b)=>{ const x=priceOf(a), y=priceOf(b); if(x==null) return 1; if(y==null) return -1; return (x-y)*k; }); }
   else gs.sort((a,b)=>a.o-b.o);
