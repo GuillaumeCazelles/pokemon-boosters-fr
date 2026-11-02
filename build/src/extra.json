@@ -423,10 +423,7 @@
    "*": "Illimitée"
   }
  },
- "edition_images": {
-  "base1:Dracaufeu:1re édition": "https://archives.bulbagarden.net/media/upload/4/4d/Base_Set_Booster_Charizard_FR.jpg",
-  "base1:Tortank:1re édition": "https://archives.bulbagarden.net/media/upload/8/8d/Base_Set_Booster_Blastoise_FR.jpg"
- },
+ "edition_images": {},
  "edition_uncertain": [
   "base2:Insécateur",
   "base5:Giovanni",
@@ -452,5 +449,6 @@
   "pop2:Florizarre": "Image : version allemande du booster (même visuel).",
   "pop3:Voltali Aquali Pyroli": "Image : version anglaise du booster (même visuel).",
   "pop9:Carchacrok": "Image : version anglaise du booster (même visuel)."
- }
+ },
+ "_doc_edition_images": "Dedicated image per edition when a stable, hotlinkable one exists (Bulbapedia archives block hotlinking, so none for now)."
 }

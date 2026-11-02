@@ -98,13 +98,31 @@ main{padding:16px 16px calc(96px + env(safe-area-inset-bottom,0px))}
 .empty{text-align:center;color:var(--muted);padding:48px 16px}
 .hint{margin:0 0 12px;font-size:13px;color:var(--muted)}
 
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(3,1fr);background:color-mix(in srgb,var(--page) 92%,transparent);
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);background:color-mix(in srgb,var(--page) 92%,transparent);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
 .tabbar button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;font-size:11.5px;font-weight:600;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .tabbar svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tabbar button[aria-current="page"]{color:var(--ink)}
 .tabbar button[aria-current="page"] svg{stroke:var(--ink);fill:color-mix(in srgb,var(--frame) 35%,transparent)}
 
+/* Binder tab: physical binder pages of 2×2 or 3×3 pockets, filled in order */
+.binder{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:18px 14px;align-items:start}
+.binder.s4{grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr))}
+.bsheet{background:var(--page);border:1px solid var(--line);border-radius:6px 14px 14px 6px;padding:12px 12px 14px 22px;box-shadow:var(--shadow);position:relative;content-visibility:auto;contain-intrinsic-size:auto 520px}
+.bsheet.verso{border-radius:14px 6px 6px 14px;padding:12px 22px 14px 12px}
+.bsheet::before{content:"";position:absolute;top:18px;bottom:18px;left:8px;width:6px;background:repeating-linear-gradient(to bottom,var(--line) 0 10px,transparent 10px 34px);border-radius:3px}
+.bsheet.verso::before{left:auto;right:8px}
+.bsheet h2{margin:0 0 2px;font:800 15px/1.15 var(--f-display);display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.bsheet h2 span{font:500 11px var(--f-mono);color:var(--muted);white-space:nowrap}
+.bsheet h2 em{font-style:normal;color:var(--good)}
+.bsheet .sub{margin:0 0 8px;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bgrid{display:grid;gap:8px}
+.bgrid.g9{grid-template-columns:repeat(3,1fr)}
+.bgrid.g4{grid-template-columns:repeat(2,1fr)}
+.slot{aspect-ratio:5/9;border-radius:8px;border:1.5px dashed var(--line);background:color-mix(in srgb,var(--pocket) 50%,transparent)}
+.bgrid .pocket .nm{-webkit-line-clamp:1;min-height:1.25em;font-size:10.5px}
+.bgrid .pocket .cdl{display:block;font:600 10px/1.2 var(--f-mono);color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bgrid.g4 .pocket .nm{font-size:12px}
 .psum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px;max-width:820px}
 .psum div{background:var(--page);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .psum small{display:block;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
@@ -183,8 +201,9 @@ textarea{width:100%;min-height:90px;border-radius:12px;border:1px solid var(--li
   <div id="list"></div>
 </main>
 <nav class="tabbar" id="tabbar" aria-label="Onglets">
-  <button data-tab="all"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l-1 2 1 2v10l-1 2 1 2H7l1-2-1-2V7l1-2z"/><circle cx="12" cy="12" r="3"/></svg>Tous les boosters</button>
-  <button data-tab="coll"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.8c0 5.5-7.5 10.1-7.5 10.1z"/></svg>Ma collection</button>
+  <button data-tab="all"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l-1 2 1 2v10l-1 2 1 2H7l1-2-1-2V7l1-2z"/><circle cx="12" cy="12" r="3"/></svg>Boosters</button>
+  <button data-tab="coll"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.8c0 5.5-7.5 10.1-7.5 10.1z"/></svg>Collection</button>
+  <button data-tab="binder"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="15" height="18" rx="2"/><path d="M5 7H3M5 12H3M5 17H3M9.5 3v18M9.5 8h10.5M9.5 13h10.5"/></svg>Binder</button>
   <button data-tab="prix"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 6.5A6.5 6.5 0 1 0 17 17.5"/><path d="M4 10.5h9M4 13.5h9"/></svg>Prix</button>
 </nav>
 <div class="scrim" id="scrim" hidden></div>
@@ -215,7 +234,8 @@ const KEY = "boosters.collection.v1", UKEY = "boosters.ui.v1";
 function load(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } }
 function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } }
 let coll = load(KEY, {owned:{}});     // owned[boosterId] = "YYYY-MM-DD"
-let ui = Object.assign({tab:"all", blocs:[], missingOnly:false, noSamples:false, sort:"date", psort:"date"}, load(UKEY, {}));
+let ui = Object.assign({tab:"all", blocs:[], missingOnly:false, noSamples:false, sort:"date", psort:"date",
+  bsize:9, bowned:false, bnew:true, bsort:"date"}, load(UKEY, {}));
 if (typeof ui.bloc === "string"){ ui.blocs = ui.bloc==="all" ? [] : [ui.bloc]; delete ui.bloc; }  // single-bloc filter from the first version
 function persist(){ if(!save(KEY, coll)) toast("Impossible d'enregistrer : stockage plein ou bloqué"); }
 try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch {}
@@ -254,18 +274,21 @@ function renderStats(){
 const HINTS = {
   all: "Touchez un booster pour l'ajouter à votre collection, touchez-le encore pour le retirer. Maintenez-le appuyé pour l'agrandir. Vous pouvez choisir plusieurs blocs à la fois.",
   coll: "Vos boosters. Touchez-en un pour l'agrandir.",
-  prix: "Prix moyen de vente Cardmarket d'un booster de chaque extension, en euros."
+  prix: "Prix moyen de vente Cardmarket d'un booster de chaque extension, en euros.",
+  binder: "Vos boosters rangés page par page, comme dans un vrai classeur. Les cases grisées sont à remplir. Touchez un booster pour l'ajouter ou le retirer, maintenez-le pour l'agrandir."
 };
 const SORTS = {
   all: [["date","Chronologique"],["recent","Plus récents d'abord"],["name","Extension A→Z"]],
   coll: [["date","Chronologique"],["recent","Plus récents d'abord"],["added","Ajout récent"]],
-  prix: [["date","Chronologique"],["desc","Prix ↓"],["asc","Prix ↑"]]
+  prix: [["date","Chronologique"],["desc","Prix ↓"],["asc","Prix ↑"]],
+  binder: [["date","Chronologique"],["recent","Plus récents d'abord"]]
 };
+const sortKey = t => t==="prix" ? "psort" : t==="binder" ? "bsort" : "sort";
 function setTab(t){
   ui.tab = t; save(UKEY, ui);
   $$("#tabbar button").forEach(b => { if (b.dataset.tab===t) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
   $("#hint").textContent = HINTS[t];
-  const key = t==="prix" ? "psort" : "sort", opts = SORTS[t];
+  const key = sortKey(t), opts = SORTS[t];
   if (!opts.some(([k])=>k===ui[key])) ui[key] = opts[0][0];
   $("#sort").innerHTML = opts.map(([k,l])=>`<option value="${k}">${l}</option>`).join("");
   $("#sort").value = ui[key];
@@ -276,8 +299,12 @@ function renderChips(){
   const present = new Set(GROUPS.map(g=>g.bloc));
   $("#blocChips").innerHTML = [["all","Tous"], ...BLOCS.filter(([k])=>present.has(k)).map(([k,l])=>[k,l])]
     .map(([k,l]) => `<button class="chip" data-b="${k}" aria-pressed="${k==="all" ? !ui.blocs.length : ui.blocs.includes(k)}">${l}</button>`).join("");
-  $("#chips").innerHTML = (ui.tab==="all" ? `<button class="chip" data-m="1" aria-pressed="${ui.missingOnly}">Manquants seulement</button>` : "") +
-    `<button class="chip" data-s="1" aria-pressed="${ui.noSamples}">Sans échantillons ni avant-premières</button>`;
+  const binder = ui.tab==="binder" ? `<button class="chip" data-bs="9" aria-pressed="${ui.bsize===9}">3 × 3 (9)</button>
+    <button class="chip" data-bs="4" aria-pressed="${ui.bsize===4}">2 × 2 (4)</button>
+    <button class="chip sep" data-bo="1" aria-pressed="${ui.bowned}">Mes boosters seulement</button>
+    <button class="chip" data-bn="1" aria-pressed="${ui.bnew}">Nouvelle page par extension</button>` : "";
+  $("#chips").innerHTML = binder + (ui.tab==="all" ? `<button class="chip" data-m="1" aria-pressed="${ui.missingOnly}">Manquants seulement</button>` : "") +
+    `<button class="chip${binder?" sep":""}" data-s="1" aria-pressed="${ui.noSamples}">Sans échantillons ni avant-premières</button>`;
 }
 $("#blocChips").addEventListener("click", e => {
   const b = e.target.closest(".chip"); if(!b) return;
@@ -289,9 +316,10 @@ $("#blocChips").addEventListener("click", e => {
 $("#chips").addEventListener("click", e => {
   const b = e.target.closest(".chip"); if(!b) return;
   if (b.dataset.m) ui.missingOnly = !ui.missingOnly; if (b.dataset.s) ui.noSamples = !ui.noSamples;
+  if (b.dataset.bs) ui.bsize = +b.dataset.bs; if (b.dataset.bo) ui.bowned = !ui.bowned; if (b.dataset.bn) ui.bnew = !ui.bnew;
   save(UKEY, ui); renderChips(); renderStats(); renderList();
 });
-$("#sort").addEventListener("change", e => { ui[ui.tab==="prix"?"psort":"sort"] = e.target.value; save(UKEY, ui); renderList(); });
+$("#sort").addEventListener("change", e => { ui[sortKey(ui.tab)] = e.target.value; save(UKEY, ui); renderList(); });
 let qt; $("#q").addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(renderList, 150); });
 
 function filtered(){
@@ -299,17 +327,18 @@ function filtered(){
   return CARDS.filter(c => {
     if (!blocOk(c)) return false;
     if (ui.noSamples && isSample(c)) return false;
-    if (ui.tab==="coll" && !isOwned(c)) return false;
+    if ((ui.tab==="coll" || (ui.tab==="binder" && ui.bowned)) && !isOwned(c)) return false;
     if (ui.tab==="all" && ui.missingOnly && isOwned(c)) return false;
     return !q || c.key.includes(q);
   });
 }
 
 /* ---------- binder ---------- */
-function pocketHTML(c){
-  const own = isOwned(c);
+function pocketHTML(c, inBinder){
+  const own = isOwned(c), g = G.get(c.g);
   return `<div class="pocket${own?" own":""}" role="button" tabindex="0" data-id="${esc(c.id)}" aria-pressed="${own}" aria-label="${esc(`${G.get(c.g).t}, ${c.a}${c.v?", "+c.v:""}`)}">
     <span class="im">${imgTag(c.img, 240, "", 'loading="lazy" decoding="async"')}${c.v?`<span class="vt">${esc(c.v)}</span>`:""}</span>
+    ${inBinder ? `<span class="cdl">${esc(g.c ? g.c + " · " + g.t : g.t)}</span>` : ""}
     <span class="nm">${esc(c.a)}${c.u?` <span class="up" title="À vérifier">?</span>`:""}</span>
   </div>`;
 }
@@ -321,15 +350,46 @@ function subLine(g){
   const p = priceOf(g);
   return `${g.c?`<span class="cd">${esc(g.c)}</span> `:""}${esc(fdate(g.date))}${g.up?` · <span class="up">à venir</span>`:""}${p!=null?` · booster ≈ <b>${eur(p)}</b>`:""}`;
 }
+const sheetHead = (items, num) => {
+  const own = items.filter(isOwned).length, cnt = `${own}/${items.length}`;
+  return `feuille ${Math.ceil(num/2)} · ${num%2 ? "recto" : "verso"} · ${own===items.length ? `<em>${cnt}</em>` : cnt}`;
+};
+function renderBinder(arr){
+  const n = ui.bsize, gs = [...new Set(arr.map(c=>c.g))].map(id=>G.get(id));
+  gs.sort((a,b)=> ui.bsort==="recent" ? b.o-a.o : a.o-b.o);
+  const by = new Map(gs.map(g=>[g.id, arr.filter(c=>c.g===g.id).sort((a,b)=>a.o-b.o)]));
+  // fill pages pocket by pocket; with "new page per extension" an extension only starts mid-page
+  // when it fits entirely in what is left of the current page
+  const pages = []; let cur = [];
+  const flush = () => { if (cur.length){ while (cur.length < n) cur.push(null); pages.push(cur); cur = []; } };
+  for (const g of gs){
+    const cs = by.get(g.id);
+    if (ui.bnew && cur.length && cs.length > n - cur.length) flush();
+    for (const c of cs){ cur.push(c); if (cur.length===n){ pages.push(cur); cur = []; } }
+  }
+  flush();
+  const sheetHTML = (pg, i) => {
+    const items = pg.filter(Boolean), num = i + 1;
+    const sets = [...new Set(items.map(c=>c.g))].map(id=>G.get(id));
+    return `<section class="bsheet${num%2 ? "" : " verso"}" data-page="${num}">
+      <h2>Page ${num} <span>${sheetHead(items, num)}</span></h2>
+      <p class="sub" title="${esc(sets.map(g=>g.t).join(", "))}">${sets.map(g=>esc(g.c ? g.c+" "+g.t : g.t)).join(" · ")}</p>
+      <div class="bgrid g${n}">${pg.map(c => c ? pocketHTML(c, true) : `<span class="slot" aria-hidden="true"></span>`).join("")}</div></section>`;
+  };
+  const owned = arr.filter(isOwned).length;
+  $("#list").innerHTML = `<p class="hint"><b>${pages.length} page${pages.length>1?"s":""}</b> de ${n} poches, soit ${Math.ceil(pages.length/2)} feuille${pages.length>2?"s":""} recto verso · ${owned}/${arr.length} boosters rangés</p>
+    <div class="binder s${n}">${pages.map(sheetHTML).join("")}</div>`;
+}
 function renderList(){
   if (ui.tab==="prix"){ renderPrices(); return; }
   const el = $("#list"), arr = filtered();
   if (!arr.length){
-    el.innerHTML = ui.tab==="coll" && !Object.keys(coll.owned).length
+    el.innerHTML = (ui.tab==="coll" || (ui.tab==="binder" && ui.bowned)) && !Object.keys(coll.owned).length
       ? `<p class="empty">Votre collection est vide.<br>Ouvrez l'onglet Tous les boosters et touchez ceux que vous possédez.</p>`
       : `<p class="empty">Aucun booster ne correspond à ces filtres.</p>`;
     return;
   }
+  if (ui.tab==="binder"){ renderBinder(arr); return; }
   if (ui.tab==="coll" && ui.sort==="added"){
     const flat = [...arr].sort((a,b)=> (coll.owned[b.id]||"").localeCompare(coll.owned[a.id]||""));
     el.innerHTML = `<div class="bpage"><div class="grid">${flat.map(pocketHTML).join("")}</div></div>`; return;
@@ -347,8 +407,16 @@ function renderList(){
 }
 function refreshOne(id){
   renderStats();
-  if (ui.tab!=="all"){ renderList(); return; }
+  const inBinder = ui.tab==="binder" && !ui.bowned;
+  if (ui.tab!=="all" && !inBinder){ renderList(); return; }
   const c = BY_ID.get(id), old = document.querySelector(`#list .pocket[data-id="${CSS.escape(id)}"]`);
+  if (old && inBinder){
+    const t = document.createElement("div"); t.innerHTML = pocketHTML(c, true);
+    const nu = t.firstElementChild; old.replaceWith(nu); nu.classList.add("flash");
+    const sh = nu.closest(".bsheet"), h = sh && sh.querySelector("h2 span");
+    if (h) h.innerHTML = sheetHead([...sh.querySelectorAll(".pocket")].map(p=>BY_ID.get(p.dataset.id)), +sh.dataset.page);
+    return;
+  }
   if (old){
     if (ui.missingOnly && isOwned(c)) old.remove();
     else { const t = document.createElement("div"); t.innerHTML = pocketHTML(c); const nu = t.firstElementChild; old.replaceWith(nu); nu.classList.add("flash"); }
@@ -364,7 +432,7 @@ function toggle(id){
 $("#list").addEventListener("click", e => {
   const pr = e.target.closest(".prow"); if (pr){ ui.blocs=[]; $("#q").value = G.get(pr.dataset.g).t; setTab("all"); return; }
   const p = e.target.closest(".pocket"); if (!p) return;
-  if (ui.tab==="all") toggle(p.dataset.id); else openZoom(p.dataset.id);
+  if (ui.tab==="all" || (ui.tab==="binder" && !ui.bowned)) toggle(p.dataset.id); else openZoom(p.dataset.id);
 });
 $("#list").addEventListener("keydown", e => { if ((e.key==="Enter"||e.key===" ") && e.target.classList.contains("pocket")){ e.preventDefault(); e.target.click(); } });
 

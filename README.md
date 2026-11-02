@@ -6,7 +6,8 @@ Suivi de collection des boosters Pokémon français : chaque visuel de chaque ex
 
 - Toucher un booster l'ajoute à la collection ; le toucher encore le retire. Maintenir appuyé l'agrandit.
 - Une page par extension, avec son sigle officiel, sa date de sortie et le prix d'un booster.
-- Filtres par bloc (Wizards, EX, Diamant & Perle, …, Méga-Évolution), boosters manquants, sans échantillons.
+- Filtres par bloc, plusieurs à la fois (Wizards, EX, Diamant & Perle, …, Méga-Évolution), boosters manquants, sans échantillons.
+- Onglet Binder : les boosters rangés page par page comme dans un classeur, en pages de 9 (3 × 3) ou de 4 (2 × 2), recto et verso, avec une nouvelle page par extension ou à la suite, et toute la collection (cases vides à remplir) ou seulement les boosters possédés.
 - Onglet Prix : prix moyen de vente Cardmarket d'un booster de chaque extension, valeur de la collection et coût pour la compléter.
 - La collection est enregistrée dans le navigateur de chaque appareil ; sauvegarde et restauration depuis le menu ☰.
 - Sur iPhone : Safari → Partager → « Sur l'écran d'accueil ».
